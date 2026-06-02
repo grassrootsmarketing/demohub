@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demohub — Retailer Portals</title>
+<style>
+  :root {
+    --forest-900:#0d1f12; --forest-800:#1a3a21; --forest-700:#234d2c; --forest-600:#2d6339;
+    --forest-300:#7bc285; --forest-100:#d4edda; --forest-50:#eef7f0;
+    --sand-100:#faf8f5; --sand-200:#f2ede6; --sand-300:#e8e0d5; --bark-500:#7a6352;
+    --radius:14px; --shadow:0 6px 20px rgba(13,31,18,0.08);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Source Sans 3',system-ui,sans-serif; background:linear-gradient(135deg,var(--sand-100),var(--forest-50)); color:var(--forest-900); min-height:100vh; padding:48px 20px; }
+  .wrap { max-width:920px; margin:0 auto; }
+  header { text-align:center; margin-bottom:40px; }
+  .logo { width:64px; height:64px; border-radius:16px; background:var(--forest-600); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.5rem; letter-spacing:1px; margin-bottom:16px; }
+  h1 { font-size:2.2rem; color:var(--forest-800); }
+  .tag { color:var(--bark-500); font-size:1.05rem; margin-top:6px; }
+  .section-label { text-transform:uppercase; letter-spacing:0.08em; font-size:0.75rem; color:var(--bark-500); font-weight:700; margin:32px 0 14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+  .card { background:#fff; border:1px solid var(--sand-200); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); text-decoration:none; color:inherit; transition:transform .2s,border-color .2s; display:block; }
+  a.card:hover { transform:translateY(-4px); border-color:var(--forest-300); }
+  .card h3 { color:var(--forest-800); font-size:1.2rem; margin-bottom:4px; }
+  .card p { color:var(--bark-500); font-size:0.92rem; }
+  .pill { display:inline-block; margin-top:14px; font-size:0.8rem; font-weight:600; padding:4px 12px; border-radius:20px; background:var(--forest-100); color:var(--forest-700); }
+  .pill.soon { background:var(--sand-200); color:var(--bark-500); }
+  .card.disabled { opacity:0.7; cursor:default; }
+  footer { text-align:center; color:var(--bark-500); font-size:0.85rem; margin-top:48px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">DH</div>
+      <h1>Demohub</h1>
+      <p class="tag">In-store demo scheduling for independent grocery retailers</p>
+    </header>
+
+    <div class="section-label">Retailer portals</div>
+    <div class="grid">
+      <a class="card" href="gus-community-market-scheduling-portal.html">
+        <h3>Gus's Community Market</h3>
+        <p>Five San Francisco locations · client booking + admin dashboard</p>
+        <span class="pill">Live</span>
+      </a>
+      <div class="card disabled">
+        <h3>Woodlands Market</h3>
+        <p>Shares the portal template — content &amp; branding swap.</p>
+        <span class="pill soon">Coming soon</span>
+      </div>
+    </div>
+
+    <div class="section-label">Platform</div>
+    <div class="grid">
+      <div class="card disabled">
+        <h3>Demohub marketing site</h3>
+        <p>B2B one-pager that sells the platform to other independent markets.</p>
+        <span class="pill soon">Coming soon</span>
+      </div>
+    </div>
+
+    <footer>Demohub · 4-hour demo slots · 80/20 revenue split · no monthly subscription</footer>
+  </div>
+</body>
+</html>

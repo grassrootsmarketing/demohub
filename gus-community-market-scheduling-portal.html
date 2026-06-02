@@ -166,6 +166,17 @@
         .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
         .status-confirmed { background: var(--forest-100); color: var(--forest-700); }
         .status-pending { background: #fbeecb; color: #8a6a17; }
+        #adminTableView { overflow-x: auto; }
+        #adminTableView table { min-width: 760px; }
+        .admin-cal-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+        .admin-cal-nav button { background: white; border: 1px solid var(--sand-300); border-radius: var(--radius-sm); width: 32px; height: 32px; cursor: pointer; color: var(--forest-700); font-size: 1.1rem; }
+        .admin-cal-nav span { font-weight: 600; color: var(--forest-800); min-width: 170px; text-align: center; }
+        .admin-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .admin-cal-cell { min-height: 70px; border: 1px solid var(--sand-200); border-radius: var(--radius-sm); padding: 6px; display: flex; flex-direction: column; gap: 3px; }
+        .admin-cal-cell.empty { border: none; }
+        .admin-cal-cell .cal-date { color: var(--bark-500); font-weight: 600; font-size: 0.75rem; }
+        .admin-cal-demo { background: var(--forest-100); color: var(--forest-700); border-radius: 4px; padding: 2px 5px; font-size: 0.68rem; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .admin-cal-demo.pending { background: #fbeecb; color: #8a6a17; }
         
         .settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
         .settings-card { background: white; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--sand-200); }
@@ -417,7 +428,7 @@
                     <div class="stat-card"><div class="stat-label">Upcoming Demos</div><div class="stat-value" id="statDemos">8</div><div class="stat-change" id="statDemosNote">Across all locations</div></div>
                     <div class="stat-card"><div class="stat-label">Your Revenue (80%)</div><div class="stat-value" id="statRevenue">$192</div><div class="stat-change" id="statTotalNote">From $240 total</div></div>
                     <div class="stat-card"><div class="stat-label">Platform Fee (20%)</div><div class="stat-value" id="statPlatform">$48</div></div>
-                    <div class="stat-card"><div class="stat-label">Demo Fee</div><div class="stat-value">$30</div></div>
+                    <div class="stat-card"><div class="stat-label">Demo Fee</div><div class="stat-value" id="statDemoFee">$30</div></div>
                 </div>
                 <div class="table-card" style="margin-bottom: 32px;">
                     <div class="table-header">
@@ -440,16 +451,7 @@
                     <div id="adminTableView">
                         <table>
                             <thead><tr><th>Date &amp; Time</th><th>Location</th><th>Company</th><th>Contact</th><th>Product</th><th>Units</th><th>Status</th></tr></thead>
-                            <tbody id="demoTableBody">
-                                <tr data-location="Mission Bay"><td>Jun 18, 2026 · 12:00 PM</td><td>Mission Bay</td><td>Califia Farms</td><td>Dana Reyes</td><td>Oat Milk Barista Blend</td><td>60</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                                <tr data-location="Mission"><td>Jun 19, 2026 · 1:00 PM</td><td>Mission</td><td>OLIPOP</td><td>Marcus Liu</td><td>Vintage Cola</td><td>72</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                                <tr data-location="Haight St."><td>Jun 21, 2026 · 11:00 AM</td><td>Haight St.</td><td>Siete Foods</td><td>Priya Nair</td><td>Grain-Free Tortilla Chips</td><td>48</td><td><span class="status-badge status-pending">Pending</span></td></tr>
-                                <tr data-location="Noriega"><td>Jun 24, 2026 · 2:00 PM</td><td>Noriega</td><td>Chomps</td><td>Sara Goldberg</td><td>Beef Stick Variety Pack</td><td>90</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                                <tr data-location="Canyon"><td>Jun 26, 2026 · 12:30 PM</td><td>Canyon (Glen Park)</td><td>Spindrift</td><td>Tom Alvarez</td><td>Sparkling Water 8-Pack</td><td>64</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                                <tr data-location="Mission Bay"><td>Jun 28, 2026 · 1:30 PM</td><td>Mission Bay</td><td>Magic Spoon</td><td>Lena Park</td><td>Cereal Sampler Box</td><td>50</td><td><span class="status-badge status-pending">Pending</span></td></tr>
-                                <tr data-location="Mission"><td>Jul 1, 2026 · 11:30 AM</td><td>Mission</td><td>poppi</td><td>Andre Foster</td><td>Prebiotic Soda – Citrus</td><td>80</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                                <tr data-location="Haight St."><td>Jul 3, 2026 · 3:00 PM</td><td>Haight St.</td><td>Once Upon a Farm</td><td>Mia Chen</td><td>Organic Smoothie Pouch</td><td>96</td><td><span class="status-badge status-confirmed">Confirmed</span></td></tr>
-                            </tbody>
+                            <tbody id="demoTableBody"></tbody>
                         </table>
                         <div id="demoEmptyState" style="display: none; padding: 32px 24px; text-align: center; color: var(--bark-500);">No demos scheduled at this location.</div>
                     </div>
@@ -478,9 +480,9 @@
                     <div class="settings-card">
                         <div class="settings-card-header"><h3>Settings</h3></div>
                         <div class="settings-card-body">
-                            <div class="form-group"><label class="form-label">Demo Fee</label><input type="text" class="form-input" value="$30.00"></div>
-                            <div class="form-group"><label class="form-label">Demo Duration</label><input type="text" class="form-input" value="3 hours" disabled></div>
-                            <div class="form-group"><label class="form-label">Advance Booking</label><input type="text" class="form-input" value="14 days minimum" disabled></div>
+                            <div class="form-group"><label class="form-label">Demo Fee</label><input type="text" class="form-input" id="setDemoFee" value="$30.00" onchange="saveSettings()"></div>
+                            <div class="form-group"><label class="form-label">Demo Duration</label><input type="text" class="form-input" id="setDuration" value="3 hours" onchange="saveSettings()"></div>
+                            <div class="form-group"><label class="form-label">Advance Booking</label><input type="text" class="form-input" id="setAdvance" value="14 days minimum" onchange="saveSettings()"></div>
                             <div class="form-group"><label class="form-label">Calendar Sync</label><button class="btn btn-secondary" style="width: 100%; justify-content: center;"><svg viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>Connect Outlook</button></div>
                         </div>
                     </div>
@@ -526,14 +528,155 @@
         let currentYear = new Date().getFullYear();
         let currentLocation = 'Mission Bay';
         let cart = [];
-        const PRICE_PER_DEMO = 30;
+        let PRICE_PER_DEMO = 30;
         const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+        // ---- Demo data model (single source of truth) ----
+        const DEMOS_KEY = 'gcm_demos_v1';
+        const SETTINGS_KEY = 'gcm_settings_v1';
+        const AVAIL_KEY = 'gcm_availability_v1';
+        const seedDemos = [
+            {dateISO:'2026-06-18', time:'12:00 PM', location:'Mission Bay', company:'Califia Farms', contact:'Dana Reyes', product:'Oat Milk Barista Blend', units:60, status:'confirmed'},
+            {dateISO:'2026-06-19', time:'1:00 PM', location:'Mission', company:'OLIPOP', contact:'Marcus Liu', product:'Vintage Cola', units:72, status:'confirmed'},
+            {dateISO:'2026-06-21', time:'11:00 AM', location:'Haight St.', company:'Siete Foods', contact:'Priya Nair', product:'Grain-Free Tortilla Chips', units:48, status:'pending'},
+            {dateISO:'2026-06-24', time:'2:00 PM', location:'Noriega', company:'Chomps', contact:'Sara Goldberg', product:'Beef Stick Variety Pack', units:90, status:'confirmed'},
+            {dateISO:'2026-06-26', time:'12:30 PM', location:'Canyon', company:'Spindrift', contact:'Tom Alvarez', product:'Sparkling Water 8-Pack', units:64, status:'confirmed'},
+            {dateISO:'2026-06-28', time:'1:30 PM', location:'Mission Bay', company:'Magic Spoon', contact:'Lena Park', product:'Cereal Sampler Box', units:50, status:'pending'},
+            {dateISO:'2026-07-01', time:'11:30 AM', location:'Mission', company:'poppi', contact:'Andre Foster', product:'Prebiotic Soda – Citrus', units:80, status:'confirmed'},
+            {dateISO:'2026-07-03', time:'3:00 PM', location:'Haight St.', company:'Once Upon a Farm', contact:'Mia Chen', product:'Organic Smoothie Pouch', units:96, status:'confirmed'}
+        ];
+        let demos = [];
+        let adminMonth = new Date().getMonth();
+        let adminYear = new Date().getFullYear();
+        const LOC_LABELS = {'Canyon':'Canyon (Glen Park)'};
+        function locLabel(loc){ return LOC_LABELS[loc] || loc; }
+        function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+        function safeStore(fn){ try { fn(); } catch(e){} }
+
+        function loadDemos(){
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem(DEMOS_KEY)); } catch(e){}
+            demos = (Array.isArray(saved) && saved.length) ? saved : seedDemos.slice();
+        }
+        function saveDemos(){ safeStore(function(){ localStorage.setItem(DEMOS_KEY, JSON.stringify(demos)); }); }
+        function sortDemos(){ demos.sort(function(a,b){ return a.dateISO < b.dateISO ? -1 : (a.dateISO > b.dateISO ? 1 : 0); }); }
+        function fmtDate(iso){
+            const p = iso.split('-'); const d = new Date(+p[0], +p[1]-1, +p[2]);
+            return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+        }
+
+        function renderDemoTable(){
+            const tb = document.getElementById('demoTableBody');
+            if (!tb) return;
+            sortDemos();
+            tb.innerHTML = demos.map(function(d){
+                return '<tr data-location="' + d.location + '">' +
+                    '<td>' + fmtDate(d.dateISO) + ' · ' + d.time + '</td>' +
+                    '<td>' + locLabel(d.location) + '</td>' +
+                    '<td>' + d.company + '</td>' +
+                    '<td>' + d.contact + '</td>' +
+                    '<td>' + d.product + '</td>' +
+                    '<td>' + d.units + '</td>' +
+                    '<td><span class="status-badge status-' + d.status + '">' + cap(d.status) + '</span></td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function setAdminView(mode){
+            const tableView = document.getElementById('adminTableView');
+            const calView = document.getElementById('adminCalendarView');
+            const tBtn = document.getElementById('tableToggle');
+            const cBtn = document.getElementById('calendarToggle');
+            if (mode === 'calendar'){
+                tableView.style.display = 'none'; calView.style.display = 'block';
+                cBtn.classList.add('active'); tBtn.classList.remove('active');
+                renderAdminCalendar();
+            } else {
+                calView.style.display = 'none'; tableView.style.display = 'block';
+                tBtn.classList.add('active'); cBtn.classList.remove('active');
+            }
+        }
+        function adminPrevMonth(){ adminMonth--; if(adminMonth<0){adminMonth=11;adminYear--;} renderAdminCalendar(); }
+        function adminNextMonth(){ adminMonth++; if(adminMonth>11){adminMonth=0;adminYear++;} renderAdminCalendar(); }
+        function renderAdminCalendar(){
+            const grid = document.getElementById('adminCalGrid');
+            const label = document.getElementById('adminCalMonth');
+            if (!grid) return;
+            if (label) label.textContent = months[adminMonth] + ' ' + adminYear;
+            const selected = document.getElementById('locationFilter').value;
+            const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            let html = dayNames.map(function(d){ return '<div class="calendar-day-name">' + d + '</div>'; }).join('');
+            const firstDay = new Date(adminYear, adminMonth, 1).getDay();
+            const daysInMonth = new Date(adminYear, adminMonth+1, 0).getDate();
+            for (let i=0;i<firstDay;i++) html += '<div class="admin-cal-cell empty"></div>';
+            for (let day=1; day<=daysInMonth; day++){
+                const iso = adminYear + '-' + String(adminMonth+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+                const dayDemos = demos.filter(function(d){ return d.dateISO === iso && (selected==='all' || d.location===selected); });
+                let cell = '<div class="admin-cal-cell"><div class="cal-date">' + day + '</div>';
+                cell += dayDemos.map(function(d){ return '<div class="admin-cal-demo ' + d.status + '" title="' + d.company + ' – ' + locLabel(d.location) + ' (' + d.time + ')">' + d.company + '</div>'; }).join('');
+                html += cell + '</div>';
+            }
+            grid.innerHTML = html;
+        }
+
+        function parseFee(v){ const n = parseFloat(String(v).replace(/[^0-9.]/g,'')); return isNaN(n) ? 30 : n; }
+        function updateDemoFeeCard(){
+            const card = document.getElementById('statDemoFee');
+            if (card) card.textContent = '$' + (PRICE_PER_DEMO % 1 === 0 ? PRICE_PER_DEMO : PRICE_PER_DEMO.toFixed(2));
+        }
+        function loadSettings(){
+            let s = null; try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)); } catch(e){}
+            if (s){
+                if (s.fee != null && document.getElementById('setDemoFee')) document.getElementById('setDemoFee').value = '$' + Number(s.fee).toFixed(2);
+                if (s.duration && document.getElementById('setDuration')) document.getElementById('setDuration').value = s.duration;
+                if (s.advance && document.getElementById('setAdvance')) document.getElementById('setAdvance').value = s.advance;
+            }
+            const feeEl = document.getElementById('setDemoFee');
+            PRICE_PER_DEMO = parseFee(feeEl ? feeEl.value : 30);
+            updateDemoFeeCard();
+        }
+        function saveSettings(){
+            PRICE_PER_DEMO = parseFee(document.getElementById('setDemoFee').value);
+            document.getElementById('setDemoFee').value = '$' + PRICE_PER_DEMO.toFixed(2);
+            const s = { fee: PRICE_PER_DEMO, duration: document.getElementById('setDuration').value, advance: document.getElementById('setAdvance').value };
+            safeStore(function(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); });
+            updateDemoFeeCard();
+            filterDemos();
+        }
+        function loadAvailability(){
+            let a = null; try { a = JSON.parse(localStorage.getItem(AVAIL_KEY)); } catch(e){}
+            const boxes = document.querySelectorAll('.availability-day input[type="checkbox"]');
+            if (a && a.length === boxes.length){ boxes.forEach(function(b,i){ b.checked = a[i]; }); }
+            boxes.forEach(function(b){ b.addEventListener('change', saveAvailability); });
+        }
+        function saveAvailability(){
+            const boxes = document.querySelectorAll('.availability-day input[type="checkbox"]');
+            const a = [].map.call(boxes, function(b){ return b.checked; });
+            safeStore(function(){ localStorage.setItem(AVAIL_KEY, JSON.stringify(a)); });
+        }
+        function addBooking(b){
+            demos.push({ dateISO: b.dateISO, time: b.time, location: b.location, company: b.company || 'New Booking', contact: b.contact || '—', product: b.product || 'Pending details', units: b.units || '—', status: 'confirmed' });
+            saveDemos();
+        }
+        function initAdmin(){
+            loadSettings();
+            loadAvailability();
+            loadDemos();
+            renderDemoTable();
+            filterDemos();
+        }
         
         document.addEventListener('DOMContentLoaded', renderCalendar);
         
         function showView(view) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(view + 'View').classList.add('active');
+            if (view === 'admin') {
+                renderDemoTable();
+                filterDemos();
+                var calView = document.getElementById('adminCalendarView');
+                if (calView && calView.style.display !== 'none') renderAdminCalendar();
+            }
         }
         
         function filterDemos() {
@@ -549,9 +692,8 @@
             updateAdminStats(selected, visible);
         }
 
-        const DEMO_FEE = 30;
         function updateAdminStats(selected, count) {
-            const total = count * DEMO_FEE;
+            const total = count * PRICE_PER_DEMO;
             const revenue = Math.round(total * 0.8);
             const platform = total - revenue;
             document.getElementById('statDemos').textContent = count;
@@ -560,7 +702,7 @@
             document.getElementById('statTotalNote').textContent = 'From $' + total + ' total';
             document.getElementById('statDemosNote').textContent = (selected === 'all') ? 'Across all locations' : selected;
         }
-        document.addEventListener('DOMContentLoaded', filterDemos);
+        document.addEventListener('DOMContentLoaded', initAdmin);
 
         function selectLocation(location) {
             currentLocation = location;
@@ -692,6 +834,11 @@
                 '</div>';
             });
             
+            // Persist each booked slot into the shared demo data so it appears in the admin dashboard
+            cart.forEach(item => { addBooking({ dateISO: item.dateStr, time: item.time, location: item.location }); });
+            renderDemoTable();
+            filterDemos();
+
             document.getElementById('confirmationDetails').innerHTML = detailsHtml;
             document.getElementById('successModal').classList.add('active');
         }
