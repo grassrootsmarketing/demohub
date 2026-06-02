@@ -414,9 +414,9 @@
                     <p class="page-subtitle">Manage your demo schedule and view earnings</p>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-label">This Month's Demos</div><div class="stat-value">12</div><div class="stat-change">↑ 3 from last month</div></div>
-                    <div class="stat-card"><div class="stat-label">Your Revenue (80%)</div><div class="stat-value">$288</div><div class="stat-change">From $360 total</div></div>
-                    <div class="stat-card"><div class="stat-label">Platform Fee (20%)</div><div class="stat-value">$72</div></div>
+                    <div class="stat-card"><div class="stat-label">Upcoming Demos</div><div class="stat-value" id="statDemos">8</div><div class="stat-change" id="statDemosNote">Across all locations</div></div>
+                    <div class="stat-card"><div class="stat-label">Your Revenue (80%)</div><div class="stat-value" id="statRevenue">$192</div><div class="stat-change" id="statTotalNote">From $240 total</div></div>
+                    <div class="stat-card"><div class="stat-label">Platform Fee (20%)</div><div class="stat-value" id="statPlatform">$48</div></div>
                     <div class="stat-card"><div class="stat-label">Demo Fee</div><div class="stat-value">$30</div></div>
                 </div>
                 <div class="table-card" style="margin-bottom: 32px;">
@@ -546,8 +546,22 @@
                 if (match) visible++;
             });
             document.getElementById('demoEmptyState').style.display = visible === 0 ? 'block' : 'none';
+            updateAdminStats(selected, visible);
         }
-        
+
+        const DEMO_FEE = 30;
+        function updateAdminStats(selected, count) {
+            const total = count * DEMO_FEE;
+            const revenue = Math.round(total * 0.8);
+            const platform = total - revenue;
+            document.getElementById('statDemos').textContent = count;
+            document.getElementById('statRevenue').textContent = '$' + revenue;
+            document.getElementById('statPlatform').textContent = '$' + platform;
+            document.getElementById('statTotalNote').textContent = 'From $' + total + ' total';
+            document.getElementById('statDemosNote').textContent = (selected === 'all') ? 'Across all locations' : selected;
+        }
+        document.addEventListener('DOMContentLoaded', filterDemos);
+
         function selectLocation(location) {
             currentLocation = location;
             document.getElementById('headerLocation').textContent = location;
