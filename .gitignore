@@ -1,0 +1,21 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Node (for when a backend / build step is added)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.vercel/
+.netlify/
